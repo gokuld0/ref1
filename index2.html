@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral Code Generator</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            color: #4CAF50;
+            font-size: 18px;
+            display: none;
+            text-align: center;
+        }
+        .celebration {
+            display: none;
+            margin-top: 20px;
+            position: relative;
+        }
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .confetti div {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 0, 0, 0.7);
+            position: absolute;
+            border-radius: 50%;
+            animation: fall 1.5s ease-in-out infinite;
+        }
+        .confetti div:nth-child(2) { animation-delay: 0.2s; background-color: rgba(0, 255, 0, 0.7); }
+        .confetti div:nth-child(3) { animation-delay: 0.4s; background-color: rgba(0, 0, 255, 0.7); }
+        .confetti div:nth-child(4) { animation-delay: 0.6s; background-color: rgba(255, 255, 0, 0.7); }
+
+        @keyframes fall {
+            0% { top: -10px; opacity: 1; }
+            50% { top: 80%; opacity: 0.5; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kanchi Valluvan IAS Academy Referral Code Generator</h1>
+        <p>Join our growing community on:</p>
+        <p>
+            <a href="https://www.instagram.com/kv_ias_academy/" target="_blank">Instagram</a> | 
+            <a href="https://facebook.com/kanchivalluvan" target="_blank">Facebook</a> | 
+            <a href="https://kanchivalluvan.com" target="_blank">Website</a>
+        </p>
+        <form id="referralForm">
+            <input type="text" id="studentName" placeholder="Enter your name" required>
+            <button type="submit">Generate</button>
+        </form>
+        <div id="result" class="result">
+            <p id="thankYouMessage"></p>
+            <p>Your referral code is:</p>
+            <strong id="referralCode"></strong>
+            <p>Share it with your friends!</p>
+        </div>
+        <div id="celebration" class="celebration">
+            <div class="confetti">
+                <div></div><div></div><div></div><div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedCodes = [];
+
+        function generateReferralCode(studentName) {
+            if (generatedCodes.includes(studentName)) {
+                alert(`Referral code for ${studentName} has already been generated.`);
+                return null;
+            }
+
+            // Generate a random string of 6 uppercase letters and digits
+            const randomString = Array.from({ length: 6 }, () =>
+                Math.random().toString(36).toUpperCase().charAt(2)
+            ).join('');
+            
+            // Extract the first 3 alphanumeric characters from the student's name
+            const namePart = studentName.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 3);
+            
+            // Combine parts to create the referral code
+            const referralCode = `KV-${namePart}-${randomString}`;
+            generatedCodes.push(studentName);
+            return referralCode;
+        }
+
+        document.getElementById('referralForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            const studentName = document.getElementById('studentName').value;
+            if (studentName) {
+                const referralCode = generateReferralCode(studentName);
+                if (referralCode) {
+                    document.getElementById('thankYouMessage').textContent = `Thank you, ${studentName}!`;
+                    document.getElementById('referralCode').textContent = referralCode;
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('celebration').style.display = 'block';
+
+                    setTimeout(() => {
+                        document.getElementById('celebration').style.display = 'none';
+                    }, 3000); // Hide celebration after 3 seconds
+                }
+            }
+        });
+    </script>
+</body>
+</html>
